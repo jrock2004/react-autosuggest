@@ -1,34 +1,44 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import "./styles.css";
-import customers from "./data/customers";
+import './styles.css';
+import customers from './data/customers';
 
-import { InputSuggest } from "./InputSuggest";
+import { InputSuggest } from './InputSuggest';
 
 export default function App() {
   const [state, setState] = useState({
     customers: customers,
-    selectedItem: {}
+    selectedItem: {},
   });
 
   const handleClick = (item) => {
     setState({
       ...state,
-      selectedItem: item
+      selectedItem: item,
     });
   };
 
   let selectedItemComponent = null;
 
   if (state.selectedItem.firstName) {
-    const { firstName, lastName, phone } = state.selectedItem;
+    const { firstName, lastName, email, phone } = state.selectedItem;
 
     selectedItemComponent = (
-      <div>
-        <h3>Selected Item</h3>
-        <ul>
-          <li>{firstName}</li>
-        </ul>
+      <div className="border rounded-sm w-1/4 shadow-lg">
+        <header className="bg-orange-700 text-white px-4 py-2">
+          <h3>Selected Item</h3>
+        </header>
+        <div className="px-4 py-2">
+          <div className="flex justify-between">
+            <span>
+              {firstName} {lastName}
+            </span>
+            <span>{phone}</span>
+          </div>
+          <div className="mt-4 text-gray-700 text-sm">
+            <span>{email}</span>
+          </div>
+        </div>
       </div>
     );
   }
@@ -46,7 +56,7 @@ export default function App() {
             handleClick={handleClick}
           />
         </div>
-        <div>{selectedItemComponent}</div>
+        <div className="border-t mt-6 pt-6 flex justify-center">{selectedItemComponent}</div>
       </main>
     </>
   );
