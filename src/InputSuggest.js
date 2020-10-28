@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import ListItem from './components/input/ListItem';
+import Results from './components/input/Results';
+
 export const InputSuggest = ({ label, suggestions, handleClick }) => {
   const inputEl = useRef(null);
   const listItemEl = useRef(null);
@@ -68,42 +71,21 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
     };
   }, [handleUserKeyPress]);
 
-  const Results = () => {
+  const ResultsList = () => {
     if (state.filteredList.length > 0) {
-      const listItems = state.filteredList.map((item) => <ListItem key={item.id} item={item} />);
+      const listItems = state.filteredList.map((item) => (
+        <ListItem
+          key={item.id}
+          item={item}
+          listItemEl={listItemEl}
+          handleListClick={handleListClick}
+        />
+      ));
 
-      return (
-        <div className="mt-1 bg-white shadow-lg rounded-sm">
-          <ul
-            ref={resultsEl}
-            tabIndex="-1"
-            aria-labelledby="suggest-label"
-            className="rounded-sm shadow-xs"
-          >
-            {listItems}
-          </ul>
-        </div>
-      );
+      return <Results listItems={listItems} resultsEl={resultsEl} />;
     } else {
       return null;
     }
-  };
-
-  const ListItem = ({ item }) => {
-    return (
-      <li
-        role="button"
-        ref={listItemEl}
-        tabIndex="0"
-        className="text-gray-900 cursor-pointer relative py-2 pl-3 pr-9 hover:text-white hover:bg-indigo-600 focus:text-white focus:bg-indigo-600"
-        onClick={(e) => handleListClick(item, e)}
-      >
-        <span className="block">
-          {item.firstName} {item.lastName}
-        </span>
-        <span className="block text-xs">{item.email}</span>
-      </li>
-    );
   };
 
   const handleChange = (event) => {
@@ -147,8 +129,13 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
     handleClick(item);
   };
 
-  ListItem.propTypes = {
-    item: PropTypes.object,
+  const handleFocus = () => {
+    if (state.value === '') {
+      setState({
+        ...state,
+        filteredList: suggestions,
+      });
+    }
   };
 
   return (
@@ -160,10 +147,11 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
         className="border rounded-sm px-3 py-1 shadow-sm"
         ref={inputEl}
         value={state.value}
+        onFocus={handleFocus}
         onChange={handleChange}
       />
 
-      <Results />
+      <ResultsList />
     </div>
   );
 };
