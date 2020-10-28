@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import './styles.css';
 import customers from './data/customers';
 
-import { InputSuggest } from './InputSuggest';
+import { InputSuggest } from './components/input/InputSuggest';
+import SelectedCustomer from './components/SelectedCustomer';
 
 export default function App() {
   const [state, setState] = useState({
@@ -18,30 +19,12 @@ export default function App() {
     });
   };
 
-  let selectedItemComponent = null;
-
-  if (state.selectedItem.firstName) {
-    const { firstName, lastName, email, phone } = state.selectedItem;
-
-    selectedItemComponent = (
-      <div className="border rounded-sm w-1/4 shadow-lg">
-        <header className="bg-orange-700 text-white px-4 py-2">
-          <h3>Selected Item</h3>
-        </header>
-        <div className="px-4 py-2">
-          <div className="flex justify-between">
-            <span>
-              {firstName} {lastName}
-            </span>
-            <span>{phone}</span>
-          </div>
-          <div className="mt-4 text-gray-700 text-sm">
-            <span>{email}</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleReset = () => {
+    setState({
+      ...state,
+      selectedItem: {},
+    });
+  };
 
   return (
     <>
@@ -56,7 +39,17 @@ export default function App() {
             handleClick={handleClick}
           />
         </div>
-        <div className="border-t mt-6 pt-6 flex justify-center">{selectedItemComponent}</div>
+        <div className="border-t mt-6 pt-6 flex flex-col items-center justify-center">
+          <SelectedCustomer selectedItem={state.selectedItem} />
+
+          {state.selectedItem.firstName && (
+            <div className="mt-6">
+              <button className="border bg-teal-700 text-white px-3 py-1" onClick={handleReset}>
+                Reset
+              </button>
+            </div>
+          )}
+        </div>
       </main>
     </>
   );

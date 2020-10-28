@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import ListItem from './components/input/ListItem';
-import Results from './components/input/Results';
+import ListItem from './ListItem';
+import Results from './Results';
 
 export const InputSuggest = ({ label, suggestions, handleClick }) => {
   const inputEl = useRef(null);
@@ -144,7 +144,7 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
         {label}
       </label>
       <input
-        className="border rounded-sm px-3 py-1 shadow-sm"
+        className="border rounded-sm px-3 py-1 mt-1 shadow-sm"
         ref={inputEl}
         value={state.value}
         onFocus={handleFocus}
