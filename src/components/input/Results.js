@@ -2,12 +2,12 @@ import React from 'react';
 
 export const Results = ({ listItems, resultsEl }) => {
   return (
-    <div className="mt-1 bg-white shadow-lg rounded-sm">
+    <div className="mt-1 bg-white shadow-xl rounded-sm relative">
       <ul
         ref={resultsEl}
         tabIndex="-1"
         aria-labelledby="suggest-label"
-        className="rounded-sm shadow-xs"
+        className="rounded-sm shadow-xl absolute bg-white z-20 inset-x-0"
       >
         {listItems}
       </ul>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import ListItem from './ListItem';
 import Results from './Results';
+import { filterList } from './utils/filterList';
 
 export const InputSuggest = ({ label, suggestions, handleClick }) => {
   const inputEl = useRef(null);
@@ -95,21 +96,7 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
     let filteredList = [];
 
     if (searchValue !== '') {
-      filteredList = state.suggestions.filter((sug) => {
-        let shouldReturn = false;
-
-        for (const [key, keyValue] of Object.entries(sug)) {
-          if (key !== 'id' && keyValue.toLowerCase().indexOf(searchValue) > -1) {
-            shouldReturn = true;
-          }
-        }
-
-        if (shouldReturn) {
-          return sug;
-        } else {
-          return null;
-        }
-      });
+      filteredList = filterList(state.suggestions, searchValue);
     }
 
     setState({
@@ -120,9 +107,11 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
   };
 
   const handleListClick = (item) => {
+    const fullName = `${item.firstName} ${item.lastName}`;
+
     setState({
       ...state,
-      value: '',
+      value: fullName,
       filteredList: [],
     });
 
@@ -139,7 +128,7 @@ export const InputSuggest = ({ label, suggestions, handleClick }) => {
   };
 
   return (
-    <div className="flex flex-col w-1/4">
+    <div className="flex flex-col mb-4">
       <label id="suggest-label" className="text-sm leading-5 font-medium text-gray-700">
         {label}
       </label>
